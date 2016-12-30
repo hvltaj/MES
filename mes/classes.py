@@ -31,4 +31,4 @@ class Element(object):
 
     def calculate_p_local(self):
         self.P_local[0] = self.node1.BC_value
-        self.P_local[1] = self.node2.BC_value2
+        self.P_local[1] = self.node2.BC_value2 * -1

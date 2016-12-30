@@ -42,14 +42,48 @@ class FileParser(object):
                 if len(line) > 3:
                     self.nodes[int(line[0])].BC_value2 = int(line[3])
 
+            for element in data.elements.values():
+                element.calculate_p_local()
+                element.calculate_h_local()
+
+            self.elements = sorted(
+                self.elements.values(),
+                key=operator.attrgetter('start')
+            )
+
+
+def fill_h_global(sorted_elements_list):
+    number_of_elements = len(sorted_elements_list)
+    H_global = [[0 for a in range(number_of_elements + 1)] for a in
+                range(number_of_elements + 1)]
+
+    for number in range(number_of_elements):
+        H_local = sorted_elements_list[number].H_local
+        H_global[number][number] += H_local[0][0]
+        H_global[number][number+1] += H_local[0][1]
+        H_global[number+1][number] += H_local[1][0]
+        H_global[number+1][number+1] += H_local[1][1]
+
+    return H_global
+
+
+def fill_p_global(sorted_elements_list):
+    number_of_elements = len(sorted_elements_list)
+    P_global = [0 for a in range(number_of_elements + 1)]
+
+    for number in range(number_of_elements):
+        P_local = sorted_elements_list[number].P_local
+
+        P_global[number] += P_local[0]
+        P_global[number+1] += P_local[1]
+
+    return P_global
 
 data = FileParser("../tests/input_file.txt")
 data.parse_file()
 
-for element in data.elements.values():
-    element.calculate_p_local()
-    element.calculate_h_local()
+H_global = fill_h_global(data.elements)
+P_global = fill_p_global(data.elements)
 
-list_of_sorted_elements = sorted(data.elements.values(), key=operator.attrgetter('start'))
-print( [c.H_local for c in list_of_sorted_elements])
+print(P_global)
 

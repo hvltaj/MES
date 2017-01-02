@@ -1,0 +1,3 @@
+source: http://www.pg.gda.pl/~krogu/Wspolczynniki_przewodzenia_ciepla.pdf
+
+dab: 0.22

@@ -1,7 +1,7 @@
-from classes import Node, Element
+from .classes import Node, Element
 from collections import OrderedDict
 import operator
-import numpy as np
+import argparse
 
 
 class FileParser(object):
@@ -43,7 +43,7 @@ class FileParser(object):
                 if len(line) > 3:
                     self.nodes[int(line[0])].BC_value2 = float(line[3])
 
-            for element in data.elements.values():
+            for element in self.elements.values():
                 element.calculate_p_local()
                 element.calculate_h_local()
 
@@ -93,18 +93,14 @@ def fill_matrix(H_global, P_global):
     return matrix
 
 
-data = FileParser("../tests/input_file.txt")
-data.parse_file()
+class CLIParser(object):
+    """CLI parser"""
+    def __init__(self):
+        self.parser = argparse.ArgumentParser(description='Process some integers.')
+        self.parser.add_argument('i_filename')
+        self.parser.add_argument('o_filename')
 
-H_global = np.array(fill_h_global(data.elements))
-P_global = np.array([item * -1 for item in fill_p_global(data.elements)])
-
-result = np.linalg.solve(H_global, P_global)
-print(H_global)
-print(P_global)
-print(result)
-
-
+        self.args = self.parser.parse_args()
 
 
 

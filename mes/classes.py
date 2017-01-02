@@ -27,8 +27,8 @@ class Element(object):
         self.H_local[0][0] = self.C
         self.H_local[0][1] = self.C * -1
         self.H_local[1][0] = self.C * -1
-        self.H_local[1][1] = self.C + self.node2.BC_value
+        self.H_local[1][1] = self.C + self.node2.BC_value * self.S
 
     def calculate_p_local(self):
         self.P_local[0] = self.node1.BC_value
-        self.P_local[1] = self.node2.BC_value2 * -1
+        self.P_local[1] = self.node2.BC_value2 * -1 * self.S
